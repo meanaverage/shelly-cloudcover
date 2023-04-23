@@ -1,3 +1,6 @@
+// Shelly MongooseJS script for NO-KEY API cloud cover retrieval and action for United States based locations
+// https://github.com/meanaverage/shelly-cloudcover/blob/main/check-clouds.js
+
 let CONFIG = {
   // url for cloudLayers data: https://api.weather.gov/stations/<STATION>/observations/latest"
   url: {
@@ -11,8 +14,8 @@ let CONFIG = {
   checkInterval: 1800 * 1000,
 
   // service hours to take action during, currently set to 6 AM to 6 PM, hours in military 24 hour time
-  serviceStart: 6, // 6 AM
-  serviceEnd: 18 // 6 PM
+  serviceStartTime: 6, // 6 AM
+  serviceEndTime: 18 // 6 PM
 };
 
 function weatherURL(location) { // function to assemble full URL based on location/station code
@@ -70,11 +73,11 @@ Shelly.call(
       let clrCheck = (response.body.indexOf("CLR")); // any value above 0 means there are clear conditions
       console.log("clrCheck set to: ", clrCheck);
       // check for overcast conditions
-        if (ovcCheck > 0 && nowTime.h > serviceStart && nowTime.h < serviceEnd) {
+        if (ovcCheck > 0 && nowTime.h >= serviceStartTime && nowTime.h < serviceEndTime) {
         activateSwitch(true);
         print("Turning switch on due to overcast conditions")           
         }
-          else if ((skcCheck > 0 || clrCheck > 0) && nowTime.h > serviceStart && nowTime.h < serviceEnd) {
+          else if ((skcCheck > 0 || clrCheck > 0) && nowTime.h >= serviceStartTime && nowTime.h < serviceEndTime) {
           activateSwitch(false);
           print("Turning switch off due to clear conditions");         
           }
