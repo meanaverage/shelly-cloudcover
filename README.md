@@ -1,4 +1,4 @@
-# shellymjs-UScloudcover
+# shelly-cloudcover
 
 ### What is this?
 
