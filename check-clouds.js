@@ -3,12 +3,16 @@ let CONFIG = {
   url: {
     prefix: "https://api.weather.gov/stations/", // using weather.gov, no API Key required
     suffix: "/observations/latest" // latest observation path
-    },
+  },
   locations: {
     station1: "KSMO" // Santa Monica Municipal Airport Station Code
   },
   // milliseconds * 1000 = seconds)
-  checkInterval: 1800 * 1000
+  checkInterval: 1800 * 1000,
+
+  // service hours to take action during, currently set to 6 AM to 6 PM, hours in military 24 hour time
+  serviceStart: 6, // 6 AM
+  serviceEnd: 18 // 6 PM
 };
 
 function weatherURL(location) { // function to assemble full URL based on location/station code
@@ -66,11 +70,11 @@ Shelly.call(
       let clrCheck = (response.body.indexOf("CLR")); // any value above 0 means there are clear conditions
       console.log("clrCheck set to: ", clrCheck);
       // check for overcast conditions
-        if (ovcCheck > 0 && nowTime.h > 6 && nowTime.h < 18) {
+        if (ovcCheck > 0 && nowTime.h > serviceStart && nowTime.h < serviceEnd) {
         activateSwitch(true);
         print("Turning switch on due to overcast conditions")           
         }
-          else if ((skcCheck > 0 || clrCheck > 0) && nowTime.h > 6 && nowTime.h < 18) {
+          else if ((skcCheck > 0 || clrCheck > 0) && nowTime.h > serviceStart && nowTime.h < serviceEnd) {
           activateSwitch(false);
           print("Turning switch off due to clear conditions");         
           }
