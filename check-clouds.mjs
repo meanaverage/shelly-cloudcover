@@ -5,7 +5,7 @@ let CONFIG = {
     suffix: "/observations/latest" // latest observation path
     },
   locations: {
-    Santa_Monica: "KSMO" // Santa Monica Municipal Airport Station Code
+    station1: "KSMO" // Santa Monica Municipal Airport Station Code
   },
   // milliseconds * 1000 = seconds)
   checkInterval: 1800 * 1000
@@ -24,7 +24,7 @@ function decodePage(response, location) {
       let secondTerm = '"'; // finds first " after base station name to get end of summary index
       let indexStart = decoded.indexOf(firstTerm); // find locaton of firstTerm defined above
       let indexEnd = decoded.indexOf(secondTerm, indexStart + 1); // find location of first Term after secondTerm
-      let cloudResult = decoded.slice(indexStart, indexEnd); // crop to just the string
+      let cloudResult = decoded.slice(indexStart, indexEnd); // crop to just the string indicating cloud cover results
       response.body = cloudResult;
 }
  
@@ -51,7 +51,7 @@ function getTime () {
 function ProcessWeatherSwitch (location) {
 Shelly.call(
   "HTTP.REQUEST", 
-  {"method": "GET", "url": weatherURL("Santa_Monica"), 
+  {"method": "GET", "url": weatherURL("station1"), 
     "headers":{
     "Content-Type":"application/ld+json"} // specifying ld+json for less info to parse vs. geojson.
    },
@@ -84,5 +84,5 @@ Shelly.call(
 
 Timer.set(CONFIG.checkInterval, true, function () {
   console.log("Checking weather");
-  ProcessWeatherSwitch("Santa_Monica");
+  ProcessWeatherSwitch("station1");
 });
