@@ -20,3 +20,5 @@ Because the response body is not returned as a strict JSON application type and 
 Therefore, we pick out the cloud cover conditions using a combination of decoding the binary response field and string manipulation to discover cloud cover conditions based on standardized cloud cover condition codes.  Most US observation stations follow the same format, so this will work in most instances.
 
 Tested thoroughly on Shelly Plus1PM devices.
+
+Feel free to contact me if you need help setting this up for your particular location/observation station. Some observation stations may use alternate cloud cover control codes.
